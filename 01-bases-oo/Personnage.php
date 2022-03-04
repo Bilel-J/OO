@@ -39,3 +39,15 @@ class Personnage
         $this->force += 1;
     }
 }
+
+
+
+//==
+
+public function setNom();
+
+public function setForcePerso (int $f){
+    if(is_int($f) && )
+    $this -> forcePerso = $f ;
+}
+
