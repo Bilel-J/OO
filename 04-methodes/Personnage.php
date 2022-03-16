@@ -111,11 +111,35 @@ class Personnage
     // on va donner la possibilité à une instance de Personne de frapper son adversaire
     public function frappeAutre(Personnage $autre)
     {
-        $forcePerso = $this->forcePerso + $this->dice();
+        // on prend la force du personnage actuel ($this) et on y rajoute la valeur d'un dé
+        $forcePerso = $this->forcePerso + $this->dice(20, 3);
+        // on prend la force du personnage opposant ($autre) et on y rajoute la valeur d'un dé
+        $forceAutre = $autre->getForcePerso() + $autre->dice(20, 3);
+        // on soustrait la force de l'autre à la force de $this
+        $blesse = $forcePerso - $forceAutre;
+
+        // si $this a blessé l'ennemi
+        if ($blesse > 0) {
+            // blessure par $this
+            $blessure = $blesse * $this->getDegats();
+            // on récupère sa vie - la blessure
+            $vieAutre = $autre->getVie() - $blessure;
+            // on met à jour la vie de $autre
+            $autre->setVie($vieAutre);
+
+            echo "{$autre->getNom()} a été blessé par {$this->getNom()} ! | par $forceAutre de défense contre $forcePerso d'attaque |Vie diminuée de $blessure <br>
+            {$autre->getNom()} | Vie : {$autre->getVie()}<br>
+            {$this->getNom()} | Vie : {$this->getVie()}<br><hr>";
+            var_dump($this, $autre);
+            // on a pas blessé l'ennemi    
+        } else {
+            echo "{$autre->getNom()} a paré le coup de {$this->getNom()} ! | par $forceAutre de défense contre $forcePerso d'attaque<hr>";
+        }
     }
 
+
     // jet de dé (side = face et roll = nombre de jet)
-    private function dice(int $side = 20, int $roll = 1)
+    public function dice(int $side = 20, int $roll = 1)
     {
         $force = 0;
         for ($i = 0; $i < $roll; $i++) {
